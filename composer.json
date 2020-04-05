@@ -28,6 +28,8 @@
         "drupal/core-composer-scaffold": "^8.8",
         "drupal/core-project-message": "^8.8",
         "drupal/core-recommended": "^8.8",
+        "drupal/default_content": "^1.0@alpha",
+        "drupal/default_content_deploy": "^1.0@beta",
         "drupal/easy_breadcrumb": "^1.8",
         "drupal/google_analytics": "^3.0",
         "drupal/iubenda_integration": "^2.0@beta",
