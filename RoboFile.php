@@ -1,4 +1,7 @@
 <?php
+
+use DrupalFinder\DrupalFinder;
+
 /**
  * This is project's console commands configuration for Robo task runner.
  *
@@ -11,6 +14,13 @@ class RoboFile extends \Robo\Tasks {
   const PROJECT_FOLDER = __DIR__;
   const DRUPAL_ROOT_FOLDER = self::PROJECT_FOLDER . '/web';
   const DATABASE_DUMP_FOLDER = self::PROJECT_FOLDER . '/backups';
+
+  /**
+   * Site.
+   *
+   * @var string
+   */
+  protected $site = 'default';
 
   /**
    * Install Drupal profile.
@@ -242,6 +252,95 @@ class RoboFile extends \Robo\Tasks {
       ->option('execution', 'no-parallel')
       ->option('report')
       ->run();
+  }
+
+  /**
+   * Scaffold file for Drupal.
+   *
+   * Create the settings.php and service.yml from default file template or twig
+   * twig template.
+   *
+   * @return $this
+   *
+   * @throws \Robo\Exception\TaskException
+   */
+  public function scaffold() {
+    $base = self::DRUPAL_ROOT_FOLDER . "/sites/{$this->site}";
+
+    // Create dir files if not exist.
+    if (!file_exists($base . DIRECTORY_SEPARATOR . 'files')) {
+      $this->getBuilder()->addTaskList([
+        'createPublicFiles' => $this->taskFilesystemStack()
+          ->mkdir($base . DIRECTORY_SEPARATOR . 'files'),
+      ]);
+    }
+
+    // Copy or print the settings.php and services.yml files.
+    $map = [
+      'settings.php' => [
+//        "{$this->enviroment}.tpl.settings.php",
+        "tpl.settings.php",
+        "default.settings.php",
+      ],
+      'services.yml' => [
+//        "{$this->enviroment}.tpl.services.yml",
+        "tpl.services.yml",
+        "default.services.yml",
+      ],
+    ];
+
+    foreach ($map as $destination_name => $sources) {
+      foreach ($sources as $template_name) {
+
+        $source = $base . DIRECTORY_SEPARATOR . $template_name;
+        $destination = $base . DIRECTORY_SEPARATOR . $destination_name;
+        if (!file_exists($source)) {
+          continue;
+        }
+
+        if (file_exists($destination)) {
+          // Remove old file.
+          $this->getBuilder()->addTaskList([
+            "remove-" . $destination_name => $this->taskFilesystemStack()
+              ->chmod(dirname($destination), 0775)
+              ->chmod($destination, 0775)
+              ->remove($destination),
+          ]);
+        }
+
+        if (file_exists($source . '.twig')) {
+          // Use twig template and engine to print new file.
+          $this->getBuilder()->addTaskList([
+            'renderTwig-' . $destination_name => $this->taskTwig()
+              ->setTemplatesDirectory($base)
+              ->setContext($this->getConfig()->export())
+              ->applyTemplate(basename($source . '.twig'), $destination),
+          ]);
+          break;
+        }
+
+        // Copy file template.
+        $this->getBuilder()->addTaskList([
+          'copy-' . $destination_name => $this->taskFilesystemStack()
+            ->copy($source, $destination),
+        ]);
+        break;
+      }
+    }
+
+    // Generate hash_salt or other settings.
+    require_once self::DRUPAL_ROOT_FOLDER . '/core/includes/bootstrap.inc';
+    require_once self::DRUPAL_ROOT_FOLDER . '/core/includes/install.inc';
+    new Settings([]);
+    $settings['settings']['hash_salt'] = (object) [
+      'value' => \Drupal\Component\Utility\Crypt::randomBytesBase64(55),
+      'required' => TRUE,
+    ];
+    $this->getBuilder()->addCode(function () use ($settings, $base) {
+      drupal_rewrite_settings($settings, $base . '/settings.php');
+    });
+
+    return $this;
   }
 
   /**

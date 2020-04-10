@@ -19,20 +19,13 @@ $settings['file_scan_ignore_directories'] = [
   'bower_components',
 ];
 
-$settings['install_profile'] = 'standard';
-
 // The hash_salt should be a unique random value for each application.
 // If left unset, the settings.platformsh.php file will attempt to provide one.
 // You can also provide a specific value here if you prefer and it will be used
 // instead. In most cases it's best to leave this blank on Platform.sh. You
 // can configure a separate hash_salt in your settings.local.php file for
 // local development.
-$settings['hash_salt'] = 'pn3ALT2xPxYI0awr9Bl-agSIh-cy7d1QZ7_Ejig7NUbgdWRzvUSbIW-XwjSbUE7gTAcQ62Q4ow';
-
-// Wodby settings.
-if (file_exists('/var/www/conf/wodby.settings.php')) {
-  include '/var/www/conf/wodby.settings.php';
-}
+// $settings['hash_salt'] = 'change_me';
 
 // Set up a config sync directory.
 //
