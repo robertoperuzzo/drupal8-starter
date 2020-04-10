@@ -1,6 +1,6 @@
 <?php
 
-use DrupalFinder\DrupalFinder;
+use Drupal\Core\Site\Settings;
 
 /**
  * This is project's console commands configuration for Robo task runner.
