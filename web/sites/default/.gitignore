@@ -1,3 +1,5 @@
 default.services.yml
 default.settings.php
 settings.local.php
+settings.php
+services.yml

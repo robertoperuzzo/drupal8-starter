@@ -1,5 +1,6 @@
 <?php
 
+use Drupal\Component\Utility\Crypt;
 use Drupal\Core\Site\Settings;
 
 /**
@@ -333,14 +334,14 @@ class RoboFile extends \Robo\Tasks {
     require_once self::DRUPAL_ROOT_FOLDER . '/core/includes/install.inc';
     new Settings([]);
     $settings['settings']['hash_salt'] = (object) [
-      'value' => \Drupal\Component\Utility\Crypt::randomBytesBase64(55),
+      'value' => Crypt::randomBytesBase64(55),
       'required' => TRUE,
     ];
     $this->getBuilder()->addCode(function () use ($settings, $base) {
       drupal_rewrite_settings($settings, $base . '/settings.php');
     });
 
-    return $this;
+    return $this->getBuilder();
   }
 
   /**

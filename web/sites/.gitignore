@@ -1,1 +1,5 @@
-/README.txt
+README.txt
+#development.services.yml
+*.services.local.yml
+example.settings.local.php
+example.sites.php
