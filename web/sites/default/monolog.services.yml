@@ -1,0 +1,20 @@
+parameters:
+
+  # Monolog
+  monolog.channel_handlers:
+    php: ['rotating_file_all','rotating_file_php']
+    ego_ibe_api: ['rotating_file_all','rotating_file_ibe_api']
+    default: ['rotating_file_all']
+  monolog.processors: ['message_placeholder', 'current_user', 'request_uri', 'ip', 'referer', 'memory_usage']
+
+services:
+
+  monolog.handler.rotating_file_php:
+    class: Monolog\Handler\RotatingFileHandler
+    arguments: ['../logs/php.log', 10, 'monolog.level.notice']
+  monolog.handler.rotating_file_ibe_api:
+    class: Monolog\Handler\RotatingFileHandler
+    arguments: ['../logs/ibe_api.log', 10, 'monolog.level.debug']
+  monolog.handler.rotating_file_all:
+    class: Monolog\Handler\RotatingFileHandler
+    arguments: ['../logs/debug.log', 10, 'monolog.level.debug']
