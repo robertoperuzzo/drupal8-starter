@@ -13,6 +13,7 @@ console/
 
 # Ignore Drupal's file directory
 /web/sites/*/files/
+/private
 
 # Ignore SimpleTest multi-site environment.
 /web/sites/simpletest
@@ -28,3 +29,4 @@ console/
 # Database dumps
 *.sql
 *.sql.gz
+*.sql.zip

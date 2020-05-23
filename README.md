@@ -2,21 +2,21 @@
 
 Starter kit to create Drupal 8 project from scratch.
 
-[![Build Status](https://travis-ci.com/github/robertoperuzzo/drupal8-starter?branch=master)](https://travis-ci.com/github/robertoperuzzo/drupal8-starter) 
+[![Build Status](https://travis-ci.com/github/robertoperuzzo/drupal8-starter?branch=master)](https://travis-ci.com/github/robertoperuzzo/drupal8-starter)
 
 This project provides a starter kit for Drupal 8 projects mixing [Drupal project template for Platform.sh](https://github.com/platformsh/platformsh-example-drupal8) and
- [Docker-based Drupal stack](https://github.com/wodby/docker4drupal) for local development environment. 
+ [Docker-based Drupal stack](https://github.com/wodby/docker4drupal) for local development environment.
 
 ## Using as a reference
 
-You can use this repository as a reference for your own Drupal projects, and borrow whatever you need. 
+You can use this repository as a reference for your own Drupal projects, and borrow whatever you need.
 
-If you are using Platform.sh, I invite you to read further informations on [Drupal project template for Platform.sh](https://github.com/platformsh/platformsh-example-drupal8) page. 
+If you are using Platform.sh, I invite you to read further informations on [Drupal project template for Platform.sh](https://github.com/platformsh/platformsh-example-drupal8) page.
 
 ## Managing a Drupal site built with Composer
 
-Nothing is easier than managing a Composer-based Drupal site on Platform.sh. 
-See [Drupal 8 and Composer](https://docs.platform.sh/frameworks/drupal8.html) for details. 
+Nothing is easier than managing a Composer-based Drupal site on Platform.sh.
+See [Drupal 8 and Composer](https://docs.platform.sh/frameworks/drupal8.html) for details.
 For example adding a single module to your Drupal installation is as simple as:
 
 ```sh
@@ -43,19 +43,21 @@ Clone this repository wherever you want
 $ git clone git@github.com:robertoperuzzo/drupal8-starter.git your-project-nam
 $ cd your-project-name
 ```
-                                                               
+
 ### Setup docker4drupal
 Copy the environment config file
 ```
-$ cp .env.dist .env
+$ cp docker/.env.dist /docker.env
 ```
-Then edit this file to set your project name 
+Then edit this file to set your project name
 ```
 PROJECT_NAME=my_drupal8_project
 ```
 and choose your application stack. For instance, if you need PHP 7.1 for macOS, you will uncomment only the row.
-`PHP_TAG=7.1-dev-macos-4.14.2`
- 
+`PHP_TAG=7.1-dev-macos-*`
+
+for instance
+
 ```
 # Linux (uid 1000 gid 1000)
 
@@ -73,53 +75,50 @@ PHP_TAG=7.1-dev-macos-4.14.2
 ```
 
 finally
+
 ```
-$ cp docker-compose.override.yml.dist docker-compose.override.yml
+$ cp docker/docker-compose.override.yml.dist docker/docker-compose.override.yml
 ```
 
 or, if you are using MacOS
 ```
-$ cp docker-compose.override.yml.macos.dist docker-compose.override.yml
+$ cp docker/docker-compose.override.yml.macos.dist docker/docker-compose.override.yml
 ```
 
 ### With Platform.sh
-Run 
+Run
 ```
 $ platform build
 ```
-For more details [Platform.sh CLI](https://docs.platform.sh/gettingstarted/cli.html).  
+For more details [Platform.sh CLI](https://docs.platform.sh/gettingstarted/cli.html).
 
 Copy `settings.local.php` file:
 ```
 $ cp settings.local.php .platform/local/shared/settings.local.php
 ```
 
-Run this command from your shell to build up your docker containers. 
+Run this command from your shell to build up your docker containers.
 ```
 $ make up
 ```
 
-Open [http://drupal.docker.localhost:8000/](http://drupal.docker.localhost:8000/) in your browser and enjoy 
+Open [http://drupal.docker.localhost:8000/](http://drupal.docker.localhost:8000/) in your browser and enjoy
 your brand new Drupal 8 website!
 
 ## Without Platform.sh
-Run 
-```
-composer install
-```
-If you don't have *composer* installed, follow this [tutorial](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-osx).
-
-Run this command from your shell to build up your docker containers. 
+Run
 ```
 $ make up
+$ make shell
+$ composer global require hirak/prestissimo && composer install
 ```
 
-Open [http://drupal.docker.localhost:8000/](http://drupal.docker.localhost:8000/) in your browser and enjoy 
+Open [http://drupal.docker.localhost:8000/](http://drupal.docker.localhost:8000/) in your browser and enjoy
 your brand new Drupal 8 website!
 
 ## Updating Remotes
-You'll need to update your git remotes to reflect that you won't be pushing to github.com with your project’s code. 
-You should rename the original origin remote (the github.com [Drupal 8 project template](https://github.com/robertoperuzzo/drupal8-starter) repository) 
+You'll need to update your git remotes to reflect that you won't be pushing to github.com with your project’s code.
+You should rename the original origin remote (the github.com [Drupal 8 project template](https://github.com/robertoperuzzo/drupal8-starter) repository)
 to 'starter' and create a new origin pointed at your bare repository.
 
 (On your local development environment)
@@ -145,12 +144,12 @@ git remote -v
 
 This starter kit contains the following contrib modules dependencies:
 
-| Module name                                                                       | Package                        | 
-| --------------------------------------------------------------------------------- | ------------------------------ | 
+| Module name                                                                       | Package                        |
+| --------------------------------------------------------------------------------- | ------------------------------ |
 | [Admin Toolbar](https://www.drupal.org/project/admin_toolbar)                     | drupal/admin_toolbar           |
 | [Adminimal Admin Toolbar](https://www.drupal.org/project/adminimal_admin_toolbar) | drupal/adminimal_admin_toolbar |
 | [Adminimal Theme](https://www.drupal.org/project/adminimal_theme)                 | drupal/adminimal_theme         |
-| [Bootstrap](https://www.drupal.org/project/bootstrap)                             | drupal/bootstrap               | 
+| [Bootstrap](https://www.drupal.org/project/bootstrap)                             | drupal/bootstrap               |
 | [Chaos tool suite (ctools)](https://www.drupal.org/project/ctools)                | drupal/ctools                  |
 | [Config Filter](https://www.drupal.org/project/config_filter)                     | drupal/config_filter           |
 | [Config Ignore](https://www.drupal.org/project/config_ignore)                     | drupal/config_ignore           |
